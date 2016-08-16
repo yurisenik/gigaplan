@@ -2,11 +2,12 @@
 # -*- coding: utf-8 -*-
 
 
-import requests
-import hashlib
 import time
+
 import base64
+import hashlib
 import hmac
+import requests
 
 
 class Request(object):
@@ -29,7 +30,7 @@ class Request(object):
         uri = '/BumsCommonApiV01/User/authorize.api'
 
         params = {'Login': login,
-                  'Password': hashlib.md5(password).hexdigest()}
+                  'Password': hashlib.md5(password.encode('utf-8')).hexdigest()}
 
         r = requests.post(self.url_prefix+self.hostname+uri,
                           params=params)
@@ -53,8 +54,7 @@ class Request(object):
                                self.hostname+uri])
         stext = sign_text.encode('utf-8')
         sign = base64.b64encode(hmac.new(self.secret_key.encode('utf-8'),
-                                         stext, hashlib.sha1).hexdigest())
-
+                                         stext, hashlib.sha1).hexdigest().encode('utf-8')).decode('utf-8')
         return sign
 
     def __call__(self, uri, data):

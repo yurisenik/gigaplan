@@ -103,3 +103,10 @@ class Users(object):
         uri = '/BumsStaffApiV01/Employee/employeesOnline.api'
         data = {}
         return self.request(uri, data)
+
+    def list_phone_types(self):
+        """See https://help.megaplan.ru/API_phone_types_list"""
+
+        uri = '/BumsStaffApiV01/Employee/phoneTypes.api'
+        data = {}
+        return self.request(uri, data)

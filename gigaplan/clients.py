@@ -5,8 +5,8 @@ class Clients(object):
     #TODO: check if user has rights todo actions
     def __init__(self, request):
         self.request = request
-    
-    def add_human(self, first_name, last_name, middle_name, email):
+
+    def add_human(self, last_name, first_name, middle_name='', email=''):
         """See https://help.megaplan.ru/API_contractor_save"""
 
         uri = '/BumsCrmApiV01/Contractor/save.api'
@@ -14,17 +14,37 @@ class Clients(object):
         data['Model[FirstName]'] = first_name
         data['Model[LastName]'] = last_name
         data['Model[MiddleName]'] = middle_name
-        data['Model[Email]'] = email
+        if email:
+            data['Model[Email]'] = email
         
         return self.request(uri, data)
-    
-    def add_company(self, name, email):
+
+    def add_company(self, name, email='', responsible_ids=(), phones=()):
         """See https://help.megaplan.ru/API_contractor_save"""
 
         uri = '/BumsCrmApiV01/Contractor/save.api'
         data = {'Model[TypePerson]': 'company'}
         data['Model[CompanyName]'] = name
-        data['Model[Email]'] = email
+
+        if email:
+            data['Model[Email]'] = email
+
+        if responsible_ids:
+            data['Model[Responsibles]'] = ','.join([str(responsible_id) for responsible_id in responsible_ids])
+
+        if phones:
+
+            def norm(tel):
+                return tel[1:] + '\t' if len(tel) == 12 else '7' + tel[1:] + '\t'
+
+            def form(tel):
+                return tel[0:1] + '-' + tel[1:4] + '-' + tel[4:]
+
+            def pref(tel):
+                return 'ph_m-' + tel if tel[2:3] == '9' else 'ph_w-' + tel
+
+            for index in range(0, len(phones)):
+                data['Model[Phones][' + str(index) + ']'] = pref(form(norm(phones[index])))
 
         return self.request(uri, data)
 

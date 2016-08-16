@@ -2,12 +2,14 @@
 # -*- coding: utf-8 -*-
 
 
-from .request import Request
-from .tasks import Tasks
-from .projects import Projects
-from .comments import Comments
-from .tags import Tags
 from .clients import Clients
+from .comments import Comments
+from .deals import Deals
+from .payers import Payers
+from .projects import Projects
+from .request import Request
+from .tags import Tags
+from .tasks import Tasks
 from .users import Users
 
 
@@ -20,3 +22,5 @@ class Megaplan(object):
         self.tags = Tags(self.request)
         self.clients = Clients(self.request)
         self.users = Users(self.request)
+        self.deals = Deals(self.request)
+        self.payers = Payers(self.request)
