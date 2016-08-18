@@ -6,7 +6,7 @@ class Clients(object):
     def __init__(self, request):
         self.request = request
 
-    def add_human(self, last_name, first_name, middle_name='', email=''):
+    def add_human(self, last_name, first_name, middle_name='', email='', parent_company=0):
         """See https://help.megaplan.ru/API_contractor_save"""
 
         uri = '/BumsCrmApiV01/Contractor/save.api'
@@ -16,6 +16,8 @@ class Clients(object):
         data['Model[MiddleName]'] = middle_name
         if email:
             data['Model[Email]'] = email
+        if parent_company:
+            data['Model[ParentCompany]'] = parent_company
         
         return self.request(uri, data)
 
@@ -48,7 +50,7 @@ class Clients(object):
 
         return self.request(uri, data)
 
-    def edit_human(self, client_id,first_name='', last_name='',
+    def edit_human(self, client_id, first_name='', last_name='',
                    middle_name='', email=''):
         """See https://help.megaplan.ru/API_contractor_save"""
 
